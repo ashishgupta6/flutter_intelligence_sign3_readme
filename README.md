@@ -61,15 +61,13 @@ The Sign3 SDK is a fraud prevention toolkit designed to assess device security, 
       ```
 <br>
 
-## Initializing the SDK
+## Initializing the SDK for Android
 1. In Android, create an `Application` class in the Android folder of your Flutter project, initialize the Sign3 SDK in the `onCreate()` method of the class, and add the Application class to your `AndroidManifest.xml` file.
-2. In iOS, initialize the SDK in your AppDelegate class within the application(_:didFinishLaunchingWithOptions:) method.
-3. This SDK needs 2 required permissions for Android to achieve higher accuracy.
+2. This SDK needs 2 required permissions for Android to achieve higher accuracy.
     - ACCESS_FINE_LOCATION
     - READ_PHONE_STATE
-4. Use the ClientID and Client Secret shared with the credentials document.
+3. Use the ClientID and Client Secret shared with the credentials document.
 
-## For Android
 ### For Java
 ```java
 public class MyApplication extends FlutterApplication {
@@ -122,9 +120,21 @@ class MyApplication : FlutterApplication() {
 
 </manifest>
 ```
+<br>
 
 
-## For iOS
+## Initializing the SDK for iOS
+1. In iOS, initialize the SDK in your AppDelegate class within the application(_:didFinishLaunchingWithOptions:) method.
+2. Use the ClientID and Client Secret shared with the credentials document.
+
+## Requirements
+- iOS 13.0 or higher
+- [Access WiFi Information entitlement](https://developer.apple.com/documentation/bundleresources/entitlements/com_apple_developer_networking_wifi-info) 
+- [Location permission](https://developer.apple.com/documentation/corelocation/)
+- [iCloud](https://developer.apple.com/documentation/CloudKit)
+
+> __NOTE:__ If the listed permissions are unavailable for the application, the corresponding values will not be collected, potentially limiting the reliability of Device Intelligence. We recommend enabling as many permissions as possible based on your use case to enhance the accuracy and completeness of the data collected.
+
 ### Import Library
 
 ```swift
@@ -147,6 +157,7 @@ flutterIntelligenceSign3Plugin.initAsync()
 1. The Session ID is the unique identifier of a user's app session and serves as a reference point when retrieving the device result for that session.
 2. The Session ID follows the OS lifecycle management, in line with industry best practices. This means that a user's session remains active as long as the device maintains it, unless the user terminates the app or the device runs out of memory and has to kill the app.
 
+> __NOTE:__ The `getSessionID` function works only on Android. On iOS, the session ID is included in the Intelligence response.
  ```dart
 Future<void> getSessionID() async {
   var sessionId = await Sign3Intelligence.getSessionId();
@@ -222,13 +233,13 @@ Future<void> getIntelligence() async {
 
 ```response
 {
-    "sessionId": "e68caf89-2f68-480a-9368-2036d833c86b",
+    "sessionId": "e68caf89-2f68-480a-9368-2036d833c86b", // For iOS
     "requestId": "403ad427-5018-47b9-b6e8-790e17a78201",
     "newDevice": false,
     "deviceId": "43fccb70-d64a-4c32-a251-f07c082d7034",
     "vpn": false,
     "proxy": false,
-    "emulator": true, // For Android
+    "emulator": true, 
     "simulator": false, // For iOS
     "jailBroken": true, // For iOS
     "cloned": false,
