@@ -62,12 +62,14 @@ The Sign3 SDK is a fraud prevention toolkit designed to assess device security, 
 <br>
 
 ## Initializing the SDK
-1. Create an `Application` class in the Android folder of your Flutter project, initialize the Sign3 SDK in the `onCreate()` method of the class, and add the Application class to your `AndroidManifest.xml` file.
-2. This SDK needs 2 required permissions for Android to achieve higher accuracy.
+1. In Android, create an `Application` class in the Android folder of your Flutter project, initialize the Sign3 SDK in the `onCreate()` method of the class, and add the Application class to your `AndroidManifest.xml` file.
+2. In iOS, initialize the SDK in your AppDelegate class within the application(_:didFinishLaunchingWithOptions:) method.
+3. This SDK needs 2 required permissions for Android to achieve higher accuracy.
     - ACCESS_FINE_LOCATION
     - READ_PHONE_STATE
-3. Use the ClientID and Client Secret shared with the credentials document.
+4. Use the ClientID and Client Secret shared with the credentials document.
 
+## For Android
 ### For Java
 ```java
 public class MyApplication extends FlutterApplication {
@@ -120,6 +122,24 @@ class MyApplication : FlutterApplication() {
 
 </manifest>
 ```
+
+
+## For iOS
+### Import Library
+
+```swift
+import flutter_intelligence_sign3
+```
+
+```swift
+let flutterIntelligenceSign3Plugin = FlutterIntelligenceSign3Plugin()
+OptionsBuilder.build(
+    clientId: "<SIGN3_CLIENT_ID>",
+    secret: "<SIGN3_CLIENT_SECRET>",
+    env: OptionsBuilder.ENV_DEV)  // For Prod: OptionsBuilder.ENV_PROD, For Dev: OptionsBuilder.ENV_DEV
+flutterIntelligenceSign3Plugin.initAsync()
+```
+
 <br>
 
 ## Get Session ID
@@ -202,12 +222,15 @@ Future<void> getIntelligence() async {
 
 ```response
 {
+    "sessionId": "e68caf89-2f68-480a-9368-2036d833c86b",
     "requestId": "403ad427-5018-47b9-b6e8-790e17a78201",
     "newDevice": false,
     "deviceId": "43fccb70-d64a-4c32-a251-f07c082d7034",
     "vpn": false,
     "proxy": false,
-    "emulator": true,
+    "emulator": true, // For Android
+    "simulator": false, // For iOS
+    "jailBroken": true, // For iOS
     "cloned": false,
     "geoSpoofed": false,
     "rooted": false,
